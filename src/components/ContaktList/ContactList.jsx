@@ -4,7 +4,7 @@ import css from "./ContactList.module.css"
 function ContactList({list, handler}){
     return (
         <ul className={css.list}>
-            {list.map(el => <Contact {...el} handler={handler}/>)}
+            {list.map(el => <Contact key={el.id} {...el} handler={handler}/>)}
         </ul>
     )
 }

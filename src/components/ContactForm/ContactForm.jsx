@@ -1,57 +1,54 @@
 import { Formik, Form, Field, ErrorMessage} from 'formik'
 import * as yup from 'yup' 
+import css from './ContactForm.module.css'
+import {nanoid} from 'nanoid'
 
 const SignupSchema = yup.object().shape({
-  name: yup.string()
+  name: yup.string().trim()
     .min(2, 'Too Short!')
-    // .max(9, 'Too Long!')
-    .required('Required'),
-  number: yup.number()
+    .max(20, 'Too Long!')
+    .required('fild Required!'),
+  number: yup.string().trim()
     .min(2, 'Too Short!')
-    // .max(9, 'Too Long!')
-    .required('Required'),
+    .max(20, 'Too Long!')
+    .required('fild Required!'),
 });
 
 
-function ContactForm({value, handler, forButton}){
-    const onChange=({target})=>{
-        handler({...value, [target.name]:target.value});
-        
-      }
+function ContactForm({value, setContactList}){
+
+const values = {
+  name: "",
+  number: ""
+}
 
 
-      
+function submit(data, actions){
+  setContactList([...value, {...data, [data.name]:data.value, id: nanoid()}]);
+ data = values
+  actions.resetForm();
+}
+
     return (
-
-      
-        <Formik
-      initialValues={{
-        name: "",
-        number: ""
-      }}
-      
-      
-      
-      // onReset={onChange}
-      onSubmit={forButton}
+ <Formik
+      initialValues={values}
+      onSubmit={submit}
       validationSchema={SignupSchema}
-    //   validateOnChange={true}
-    // validateOnBlur={true}
     >
-      <Form onChange={onChange}>
-        <div>
-        <label htmlFor="name">name</label>
-        <Field value={value.name} id="name" name="name" placeholder="Jane" />
-        <ErrorMessage name="name" as="span" />
+      <Form className={css.form}>
+        <div className={css.inputBlock}>
+        <label htmlFor="name" className={css.label}>name</label>
+        <Field className={css.input} id="name"  name="name" placeholder="Please enter a name" />
+        <ErrorMessage className={css.error} name="name" component="span"/>
         </div>
 
-        <div>
-        <label htmlFor="number">number</label>
-        <Field value={value.number} id="number" name="number" placeholder="Doe" type="number" />
-        <ErrorMessage name="number" as="span" />
+        <div  className={css.inputBlock}>
+        <label htmlFor="number" className={css.label}>number</label>
+        <Field className={css.input} id="number" name="number" placeholder="Please enter a phone number" type="number" />
+        <ErrorMessage className={css.error} name="number" component="span"/>
         </div>
     
-        <button type="submit">Submit</button>
+        <button type="submit" className={css.btn} >Submit</button>
       </Form>
     </Formik>
     )
